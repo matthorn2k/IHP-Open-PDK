@@ -125,8 +125,29 @@ def create_pcell_instance(pcell_name='CIRCLE', lib_name='Basic', params={}, pos=
     for key, value in params.items():
         print(f' - {key}: {value}')
 
+    # Debugging
+    for name in pya.Library.library_names():
+        libb = pya.Library.library_by_name(name)
+        print(repr(name), "=>", libb)
+
+    print("lib_name:", repr(lib_name))
+    print("available:", [repr(x) for x in pya.Library.library_names()])
+
+    print(type(lib_name))
+    print(repr(lib_name))
+
+    for name in pya.Library.library_names():
+        print(repr(name), name == lib_name)
+
+    print("Requested:", repr(lib_name))
+
     # Get PCell Library
     lib = pya.Library.library_by_name(lib_name)
+
+    # Debugging
+    print("Result:", lib)
+    print("Result type:", type(lib))
+
 
     if not lib:
         print(f'Error: Library not found {lib_name}')
@@ -215,6 +236,7 @@ def create_subckt_instance(name, subckt_definitions, global_parameters, instance
                 if 'nf' in params and params['nf'] > 1 and 'w' in params:
                     params['w'] /= params['nf']
 
+                print("PCELL LIBRARY:", repr(template['pcell_library']))
                 for _ in range(m):
                     (width, height) = create_pcell_instance(
                         template['pcell_name'],
