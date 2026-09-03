@@ -406,7 +406,8 @@ templates = [
     },
     {
         "regex": re.compile(
-            rf"^.*cap_rfcmim(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*wfeed=(?P<wfeed>{NUMBER})).*$"
+            # rf"^.*cap_rfcmim(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*wfeed=(?P<wfeed>{NUMBER})).*$"
+            rf"^.*cap_rfcmim(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?:(?=.*wfeed=(?P<wfeed>{NUMBER})))?.*$" # FIX: optional wfeed parameter
         ),
         "pcell_library": "SG13_dev",
         "pcell_name": "rfcmim",
@@ -546,7 +547,8 @@ templates = [
     },
     {
         "regex": re.compile(
-            rf"^.*rhigh(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*m=(?P<m>\d+))(?=.*b=(?P<b>\d+)).*$"
+            # rf"^.*rhigh(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*m=(?P<m>\d+))(?=.*b=(?P<b>\d+)).*$"
+            rf"^.*rhigh(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*m=(?P<m>\d+))(?:(?=.*b=(?P<b>\d+)))?.*$" # FIX: optional b parameter
         ),
         "pcell_library": "SG13_dev",
         "pcell_name": "rhigh",
@@ -572,7 +574,8 @@ templates = [
     },
     {
         "regex": re.compile(
-            rf"^.*rppd(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*m=(?P<m>\d+))(?=.*b=(?P<b>\d+)).*$"
+            # rf"^.*rppd(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*m=(?P<m>\d+))(?=.*b=(?P<b>\d+)).*$"
+            rf"^.*rppd(?=.*w=(?P<w>{NUMBER}))(?=.*l=(?P<l>{NUMBER}))(?=.*m=(?P<m>\d+))(?:(?=.*b=(?P<b>\d+)))?.*$" # FIX: optional b parameter
         ),
         "pcell_library": "SG13_dev",
         "pcell_name": "rppd",
