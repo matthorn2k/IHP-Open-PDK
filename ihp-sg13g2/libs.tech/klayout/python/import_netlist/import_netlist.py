@@ -23,6 +23,9 @@ import pya
 
 from .ihp130_pcell_templates import templates
 
+# Debugging:
+import pprint
+
 
 SI_MULTIPLIERS = {
     "t": 1e12,
@@ -125,28 +128,28 @@ def create_pcell_instance(pcell_name='CIRCLE', lib_name='Basic', params={}, pos=
     for key, value in params.items():
         print(f' - {key}: {value}')
 
-    # Debugging
-    for name in pya.Library.library_names():
-        libb = pya.Library.library_by_name(name)
-        print(repr(name), "=>", libb)
+    # # Debugging
+    # for name in pya.Library.library_names():
+    #     libb = pya.Library.library_by_name(name)
+    #     print(repr(name), "=>", libb)
 
-    print("lib_name:", repr(lib_name))
-    print("available:", [repr(x) for x in pya.Library.library_names()])
+    # print("lib_name:", repr(lib_name))
+    # print("available:", [repr(x) for x in pya.Library.library_names()])
 
-    print(type(lib_name))
-    print(repr(lib_name))
+    # print(type(lib_name))
+    # print(repr(lib_name))
 
-    for name in pya.Library.library_names():
-        print(repr(name), name == lib_name)
+    # for name in pya.Library.library_names():
+    #     print(repr(name), name == lib_name)
 
-    print("Requested:", repr(lib_name))
+    # print("Requested:", repr(lib_name))
 
     # Get PCell Library
     lib = pya.Library.library_by_name(lib_name)
 
-    # Debugging
-    print("Result:", lib)
-    print("Result type:", type(lib))
+    # # Debugging
+    # print("Result:", lib)
+    # print("Result type:", type(lib))
 
 
     if not lib:
@@ -193,6 +196,10 @@ def create_subckt_instance(name, subckt_definitions, global_parameters, instance
     global current_x
     global spacing
 
+    # Debugging
+    print("The subckt name:")
+    print(name)
+
     if name not in subckt_definitions:
         print(f'Error: Unknown subckt {name}')
         return
@@ -222,6 +229,12 @@ def create_subckt_instance(name, subckt_definitions, global_parameters, instance
                 params = normalize_params(template['default_params'])
                 for param in template['params']:
                     raw_value = match.group(param['name'])
+
+                    # Keep the template default if an optional parameter
+                    # was not present in the netlist.
+                    if raw_value is None:
+                        continue
+
                     if param['type'] == 'string':
                         params[param['name']] = parse_si_value(raw_value)
                     elif param['type'] == 'int':
@@ -267,6 +280,7 @@ def ihp130_import_netlist():
     # Get the schematic netlist
     netlist_path = pya.FileDialog.ask_open_file_name("Choose the schematic netlist", '.', "SPICE (*.spice *.cir)")
 
+    print()
     print(f'Info: The netlist importer is still experimental.')
     
     # Check whether file exists
@@ -285,6 +299,10 @@ def ihp130_import_netlist():
     
     # Split lines
     netlist_lines = netlist_content.split('\n')
+
+    # # Debugging
+    # print("The netlist_lines:")
+    # print(netlist_lines) # A python list of strings that hold the lines of the netlist file
 
     # Subckt data
     subckt_definitions = {
@@ -377,6 +395,12 @@ def ihp130_import_netlist():
                 subckt_name = get_subckt_name_from_instance(stripped)
                 if subckt_name and subckt_name in subckt_definitions:
                     subckt_definitions[subckt_name]['references'] += 1
+
+    # Debugging:
+    # Creating a PrettyPrinter object with specific indentation
+    pp = pprint.PrettyPrinter(indent=2, width=50)
+    print("subckt_definitions:")
+    pp.pprint(subckt_definitions)
 
     # Instantiate all root-level subckts and root-level lines
     for name in list(subckt_definitions.keys()):
